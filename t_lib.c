@@ -6,7 +6,7 @@ struct tcb *running;
 //Ready queue pointer
 struct Queue *ready;
 
-struct mbox *messageQueue;
+struct mbox *msgQueue;
 
 
 /**
@@ -437,60 +437,56 @@ free(tempBox);
 }
 
 void mbox_deposit(mbox *mb, char *msg, int len) {
-struct messageNode * newMessage =(messageNode *) malloc(sizeof(messageNode));
-struct messageNode * headMessage = mb->msg;
-newMessage->message = malloc(len+1);
-strcpy(newMessage->message, msg);
-newMessage->len = len;
-newMessage->next = NULL;
+struct messageNode * newMsg =(messageNode *) malloc(sizeof(messageNode));
+struct messageNode * headMsg = mb->msg;
+newMsg->message = malloc(len+1);
+strcpy(newMsg->message, msg);
+newMsg->len = len;
+newMsg->next = NULL;
 if (mb->msg == NULL) {
-    mb->msg = newMessage;
-   // printf("First message added\n");
+    mb->msg = newMsg;
   }
 else {
-    while (headMessage->next) {
-           headMessage = headMessage -> next;
+    while (headMsg->next) {
+           headMsg = headMsg -> next;
     }
-    headMessage->next = newMessage;
-    // printf("Message added to the end of the mailbox\n");
+    headMsg->next = newMsg;
 }
 }
 
 void mbox_withdraw(mbox *mb, char *msg, int *len) {
-struct messageNode * headMessage = mb->msg;
-if (headMessage == NULL) {
+struct messageNode * headMsg = mb->msg;
+if (headMsg == NULL) {
     len = 0;
 }
 else {
-   strcpy(msg, headMessage->message);
-   len = headMessage->len;
+   strcpy(msg, headMsg->message);
+   len = headMsg->len;
 }
 if (mb->msg != NULL) {
    mb->msg = mb->msg->next;
-   free(headMessage -> message);
-   free(headMessage);
+   free(headMsg -> message);
+   free(headMsg);
 }
 }
 
 void send(int tid, char *msg, int len) {
-struct messageNode * newMessage =(messageNode *) malloc(sizeof(messageNode));
-struct messageNode * headMessage = messageQueue->msg;
+struct messageNode * newMsg =(messageNode *) malloc(sizeof(messageNode));
+struct messageNode * headMsg = msgQueue->msg;
 newMessage->message = malloc(len+1);
-strcpy(newMessage->message, msg);
-newMessage->len = len;
-newMessage->receiver = tid;
-newMessage->sender = running->thread_id;
-newMessage->next = NULL;
-if (messageQueue->msg == NULL) {
-    messageQueue->msg = newMessage;
-   // printf("First message added\n");
+strcpy(newMsg->message, msg);
+newMsg->len = len;
+newMsg->receiver = tid;
+newMsg->sender = running->thread_id;
+newMsg->next = NULL;
+if (msgQueue->msg == NULL) {
+    msgQueue->msg = newMsg;
   }
 else {
-    while (headMessage->next) {
-           headMessage = headMessage -> next;
+    while (headMsg->next) {
+           headMsg = headMsg -> next;
     }
-    headMessage->next = newMessage;
-    // printf("Message added to the end of the mailbox\n");
+    headMsg->next = newMsg;
 }
 }
 void receive(int *tid, char *msg, int *len) {
