@@ -510,7 +510,7 @@ void receive(int *tid, char *msg, int *len)
     return;
 
   // Handle if the first message is what we are looking for.
-  if (temp->receiver == running->thread_id) {
+  if (temp->receiver == running->thread_id && (!*tid || temp->sender == *tid)) {
     strcpy(msg, temp->message);
     *len = strlen(msg);
     *tid = temp->sender;
@@ -520,7 +520,7 @@ void receive(int *tid, char *msg, int *len)
 
   // Search through the messages for a match.
   while (temp->next) {
-    if (temp->next->receiver == running->thread_id) {
+    if (temp->next->receiver == running->thread_id && (!*tid || temp->sender == *tid)) {
       strcpy(msg, temp->message);
 //      freenode = temp->next;
 //      free(freenode);
