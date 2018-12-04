@@ -7,6 +7,7 @@
 #include <sys/mman.h>
 #include <signal.h>
 #include <string.h>
+#include <string.h>
 
 //A TCB structure containing the thread context and additional info
 struct tcb

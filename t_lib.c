@@ -502,5 +502,32 @@ void send(int tid, char *msg, int len)
 // Pulls a message from the queue with the matching parameters.
 void receive(int *tid, char *msg, int *len)
 {
-  
+  struct messageNode * temp = msgQueue;
+  struct messageNode * freenode;
+
+  // Return if the queue is empty
+  if (!msgQueue)
+    return;
+
+  // Handle if the first message is what we are looking for.
+  if (temp->receiver == running->thread_id) {
+    strcpy(msg, temp->message);
+    msgQueue = msgQueue->next;
+    printf("Catcher got [%s] from thread %d\n", msg, temp->sender);
+    return;
+  }
+
+  // Search through the messages for a match.
+  while (temp->next) {
+    if (temp->next->receiver == running->thread_id) {
+      strcpy(msg, temp->message);
+//      freenode = temp->next;
+//      free(freenode);
+      temp->next = temp->next->next;
+      printf("Catcher got [%s] from thread %d\n", msg, temp->next->sender);
+      return;
+    } else {
+      temp = temp->next;
+    }
+  }
 }
