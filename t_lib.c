@@ -473,7 +473,7 @@ if (mb->msg != NULL) {
 void send(int tid, char *msg, int len) {
 struct messageNode * newMsg =(messageNode *) malloc(sizeof(messageNode));
 struct messageNode * headMsg = msgQueue->msg;
-newMessage->message = malloc(len+1);
+newMsg->message = malloc(len+1);
 strcpy(newMsg->message, msg);
 newMsg->len = len;
 newMsg->receiver = tid;
