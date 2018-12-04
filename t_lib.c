@@ -471,16 +471,22 @@ void mbox_withdraw(mbox *mb, char *msg, int *len)
   }
 }
 
+// Places a new message into the message queue with the given information.
 void send(int tid, char *msg, int len)
 {
-  struct messageNode * newMsg =(messageNode *) malloc(sizeof(messageNode));
+  // Set up pointers.
+  struct messageNode * newMsg = (messageNode *) malloc(sizeof(messageNode));
   struct messageNode * temp;
+
+  // Build our new message.
   newMsg->message = malloc(len+1);
   strcpy(newMsg->message, msg);
   newMsg->len = len;
   newMsg->receiver = tid;
   newMsg->sender = running->thread_id;
   newMsg->next = NULL;
+
+  // Place our message into the queue, handle if the queue is empty.
   if (!msgQueue) {
     msgQueue = newMsg;
   } else {
@@ -492,8 +498,9 @@ void send(int tid, char *msg, int len)
   }
 }
 
+
+// Pulls a message from the queue with the matching parameters.
 void receive(int *tid, char *msg, int *len)
 {
-  //todo
-  return;
+  
 }
