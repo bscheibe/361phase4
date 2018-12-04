@@ -6,7 +6,7 @@ struct tcb *running;
 //Ready queue pointer
 struct Queue *ready;
 
-struct mbox *msgQueue;
+struct messageNode *msgQueue;
 
 
 /**
@@ -430,66 +430,70 @@ int mbox_create(mbox **mb) {
     return 1;
 }
 
-void mbox_destroy(mbox **mb) {
-struct mbox * tempBox = *mb;
-free(tempBox->msg);
-free(tempBox);
+void mbox_destroy(mbox **mb)
+{
+  struct mbox * tempBox = *mb;
+  free(tempBox->msg);
+  free(tempBox);
 }
 
 void mbox_deposit(mbox *mb, char *msg, int len) {
-struct messageNode * newMsg =(messageNode *) malloc(sizeof(messageNode));
-struct messageNode * headMsg = mb->msg;
-newMsg->message = malloc(len+1);
-strcpy(newMsg->message, msg);
-newMsg->len = len;
-newMsg->next = NULL;
-if (mb->msg == NULL) {
+  struct messageNode * newMsg =(messageNode *) malloc(sizeof(messageNode));
+  struct messageNode * headMsg = mb->msg;
+  newMsg->message = malloc(len+1);
+  strcpy(newMsg->message, msg);
+  newMsg->len = len;
+  newMsg->next = NULL;
+  if (mb->msg == NULL) {
     mb->msg = newMsg;
-  }
-else {
+  } else {
     while (headMsg->next) {
            headMsg = headMsg -> next;
     }
     headMsg->next = newMsg;
-}
+  }
 }
 
-void mbox_withdraw(mbox *mb, char *msg, int *len) {
-struct messageNode * headMsg = mb->msg;
-if (headMsg == NULL) {
+void mbox_withdraw(mbox *mb, char *msg, int *len)
+{
+  struct messageNode * headMsg = mb->msg;
+  if (headMsg == NULL) {
     len = 0;
-}
-else {
-   strcpy(msg, headMsg->message);
-   len = headMsg->len;
-}
-if (mb->msg != NULL) {
-   mb->msg = mb->msg->next;
-   free(headMsg -> message);
-   free(headMsg);
-}
+  } else {
+    strcpy(msg, headMsg->message);
+    len = headMsg->len;
+  }
+
+  if (mb->msg != NULL) {
+    mb->msg = mb->msg->next;
+    free(headMsg -> message);
+    free(headMsg);
+  }
 }
 
-void send(int tid, char *msg, int len) {
-struct messageNode * newMsg =(messageNode *) malloc(sizeof(messageNode));
-struct messageNode * headMsg = msgQueue->msg;
-newMsg->message = malloc(len+1);
-strcpy(newMsg->message, msg);
-newMsg->len = len;
-newMsg->receiver = tid;
-newMsg->sender = running->thread_id;
-newMsg->next = NULL;
-if (msgQueue->msg == NULL) {
-    msgQueue->msg = newMsg;
-  }
-else {
-    while (headMsg->next) {
-           headMsg = headMsg -> next;
+void send(int tid, char *msg, int len)
+{
+  struct messageNode * newMsg =(messageNode *) malloc(sizeof(messageNode));
+  struct messageNode * temp;
+  newMsg->message = malloc(len+1);
+  strcpy(newMsg->message, msg);
+  newMsg->len = len;
+  newMsg->receiver = tid;
+  newMsg->sender = running->thread_id;
+  newMsg->next = NULL;
+  if (!msgQueue) {
+    msgQueue = newMsg;
+  } else {
+    temp = msgQueue;
+    while (temp->next) {
+      temp = temp->next;
     }
-    headMsg->next = newMsg;
+    temp->next = newMsg;
+  }
 }
-}
-void receive(int *tid, char *msg, int *len) {
-    //todo
-    return;
+
+void receive(int *tid, char *msg, int *len)
+{
+  //todo
+  return;
 }
