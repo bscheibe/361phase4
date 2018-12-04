@@ -512,8 +512,9 @@ void receive(int *tid, char *msg, int *len)
   // Handle if the first message is what we are looking for.
   if (temp->receiver == running->thread_id) {
     strcpy(msg, temp->message);
+    *len = strlen(msg);
+    *tid = temp->sender;
     msgQueue = msgQueue->next;
-    printf("Catcher got [%s] from thread %d\n", msg, temp->sender);
     return;
   }
 
@@ -523,8 +524,9 @@ void receive(int *tid, char *msg, int *len)
       strcpy(msg, temp->message);
 //      freenode = temp->next;
 //      free(freenode);
+      *len = strlen(msg);
+      *tid = temp->next->sender;
       temp->next = temp->next->next;
-      printf("Catcher got [%s] from thread %d\n", msg, temp->next->sender);
       return;
     } else {
       temp = temp->next;
