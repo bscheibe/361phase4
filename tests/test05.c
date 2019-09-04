@@ -4,7 +4,7 @@
 
 #include <stdio.h>
 #include <string.h>
-#include "ud_thread.h"
+#include "t_lib.h"
 
 void sender(int thr_id)
 {

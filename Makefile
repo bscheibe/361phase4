@@ -34,10 +34,10 @@ LIBOBJS = $(LIBSRCS:.c=.o)
 # Source files for testing phases 1 - 4
 # To add a test file for a certain phase, just add it to the end
 # of the corresponding variable; no other changes need to be made
-P1 = test00.c test01.c test01x.c
-P2 = test01a.c test02.c test04.c test07.c
-P3 = test03.c 3test.c philosophers.c
-P4 = test05.c test06.c test08.c
+P1 = tests/test00.c tests/test01.c tests/test01x.c
+P2 = tests/test01a.c tests/test02.c tests/test07.c
+P3 = tests/test03.c  tests/test04.c tests/philosophers.c
+P4 = tests/test05.c tests/test06.c tests/test08.c
 
 TSTSRCS = $(P1) $(P2) $(P3) $(P4)
 

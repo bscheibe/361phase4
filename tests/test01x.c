@@ -9,7 +9,7 @@
  */
 
 #include <stdio.h>
-#include "ud_thread.h"
+#include "t_lib.h"
 
 // single thread: doesn't generate any other threads
 void single_thread(int thr_id) {

@@ -4,7 +4,7 @@
  * use cases: Synchronization, Locks, Countdown
  */
 
-#include "ud_thread.h"
+#include "t_lib.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>

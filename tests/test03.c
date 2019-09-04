@@ -4,7 +4,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "ud_thread.h"
+#include "t_lib.h"
 
 sem_t *s;
 int resource = 0;

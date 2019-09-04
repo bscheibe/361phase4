@@ -3,7 +3,7 @@
  */
 
 #include <stdio.h>
-#include "ud_thread.h"
+#include "t_lib.h"
 
 void function(int thr_id)
 {
